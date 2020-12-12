@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import { Boardgame } from '../src/util/boardgames'
 
 type Store = {
-  isDark: Boolean,
+  isDark: boolean,
   votes: Boardgame[]
 }
 

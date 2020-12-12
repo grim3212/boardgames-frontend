@@ -9,7 +9,8 @@ module.exports = {
     purgeLayersByDefault: true,
   },
   variants: {
-    textColor: ['group-hover', 'hover'],
+    textColor: ['group-hover', 'hover', 'disabled'],
+    backgroundColor: ['disabled', 'hover'],
   },
   theme: {
     listStyleType: {

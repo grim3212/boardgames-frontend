@@ -11,9 +11,14 @@
           Make your choice for your top 10 favorite board games. Based on votes the top will come
           back to the Yak.
         </p>
+        <h2 class="pt-4 text-xl text-purple-400">{{ games.length }} games to choose from.</h2>
       </div>
       <div class="flex flex-wrap -m-4">
-        <boardgame-card v-for="game in games" :key="game.name" :boardgame="game"></boardgame-card>
+        <boardgame-card
+          v-for="game in displayGames"
+          :key="game.name"
+          :boardgame="game"
+        ></boardgame-card>
       </div>
       <div
         class="fixed top-0 left-0 bg-blue-600 text-center flex flex-wrap w-full mb-20 flex-col items-center"
@@ -22,25 +27,44 @@
         <span class="py-4 text-lg"> Selected {{ votes.length }} / 10 </span>
         <button
           v-if="votes.length === 10"
-          @click="submitVotes"
+          @click="showSubmitModal = true"
           class="px-4 py-2 mb-2 rounded border border-black hover:bg-blue-800 hover:text-white"
         >
           Submit Votes
         </button>
       </div>
     </div>
+    <submit-vote-modal
+      v-if="showSubmitModal"
+      @cancel="showSubmitModal = false"
+      @success="onSuccess"
+    ></submit-vote-modal>
+    <success-banner v-if="showSuccess" @close="showSuccess = false"> </success-banner>
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, toRef } from 'vue'
 import BoardgameCard from '../components/BoardgameCard.vue'
-import { Boardgame, BOARDGAMES } from '../util/boardgames'
+import SubmitVoteModal from '../components/SubmitVoteModal.vue'
+import SuccessBanner from '../components/SuccessBanner.vue'
+import { Boardgame } from '../util/boardgames'
 import { globalState } from '../store'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
     BoardgameCard,
+    SubmitVoteModal,
+    SuccessBanner,
+  },
+
+  data() {
+    return {
+      games: [] as Boardgame[],
+      showSubmitModal: false,
+      showSuccess: false,
+    }
   },
 
   setup() {
@@ -50,15 +74,30 @@ export default defineComponent({
   },
 
   computed: {
-    games(): Boardgame[] {
-      return BOARDGAMES
+    displayGames(): Boardgame[] {
+      return this.games.sort((a, b) => (a.name > b.name ? 1 : -1))
     },
   },
 
   methods: {
-    submitVotes() {
-      console.log('submit votes yo')
+    onSuccess() {
+      this.showSubmitModal = false
+      this.showSuccess = true
+      this.votes = []
     },
+  },
+
+  async mounted() {
+    await axios('http://localhost:5000/games', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(({ data }) => {
+        this.games = data as Boardgame[]
+      })
+      .catch((err) => console.error(err))
   },
 })
 </script>
