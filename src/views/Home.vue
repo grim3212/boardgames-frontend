@@ -50,7 +50,7 @@ import SubmitVoteModal from '../components/SubmitVoteModal.vue'
 import SuccessBanner from '../components/SuccessBanner.vue'
 import { Boardgame } from '../util/boardgames'
 import { globalState } from '../store'
-import axios from 'axios'
+import { request } from '../util/axios'
 
 export default defineComponent({
   components: {
@@ -88,12 +88,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    await axios('http://localhost:5000/games', {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    await request('/games', 'get')
       .then(({ data }) => {
         this.games = data as Boardgame[]
       })

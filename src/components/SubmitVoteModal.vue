@@ -112,7 +112,7 @@
 <script lang="ts">
 import { defineComponent, toRef } from 'vue'
 import { globalState } from '../store'
-import axios from 'axios'
+import { request } from '../util/axios'
 
 export default defineComponent({
   setup() {
@@ -140,13 +140,7 @@ export default defineComponent({
         })),
       }
 
-      await axios('http://localhost:5000/votes', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: dataToSend,
-      })
+      await request('/votes', 'post', dataToSend)
         .then(() => {
           console.log('succesfully voted')
           this.name = ''
