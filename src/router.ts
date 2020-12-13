@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter, RouteRecordRaw } from 'vue-router'
 const SimpleLayout = () => import('./layouts/SimpleLayout.vue')
 const Home = () => import('./views/Home.vue')
+const Votes = () => import('./views/Votes.vue')
 const NotFound = () => import('./views/NotFound.vue')
-
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,6 +13,14 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'Home',
         component: Home,
+      },
+      {
+        path: 'votes',
+        name: 'Votes',
+        component: Votes,
+        meta: {
+          title: 'Votes',
+        },
       },
       {
         path: ':catchAll(.*)',

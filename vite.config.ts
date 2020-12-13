@@ -9,4 +9,12 @@ export default {
     ],
   },
   rollupInputOptions: { external: ['react'] },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:5056',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''),
+      ws: false
+    },
+  },
 } as UserConfig
