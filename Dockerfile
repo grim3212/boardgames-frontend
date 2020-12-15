@@ -12,8 +12,8 @@ RUN yarn build
 FROM nginx:1.17.5-alpine as production-stage
 
 # Copy the respective nginx configuration files
-COPY /usr/src/boardgames-frontend/nginx.conf /etc/nginx/nginx.conf
-COPY /usr/src/boardgames-frontend/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=develop-stage /usr/src/boardgames-frontend/nginx.conf /etc/nginx/nginx.conf
+COPY --from=develop-stage /usr/src/boardgames-frontend/default.conf /etc/nginx/conf.d/default.conf
 
 # copy application code
 COPY --from=develop-stage /usr/src/boardgames-frontend/dist /usr/share/nginx/html
