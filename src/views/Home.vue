@@ -12,6 +12,7 @@
           back to the Yak.
         </p>
         <h2 class="pt-4 text-xl text-purple-400">{{ games.length }} games to choose from.</h2>
+        <router-link :to="{ name: 'Votes' }" class="px-1 mt-2 rounded border border-black hover:bg-blue-800 hover:text-white">See votes</router-link>
       </div>
       <div class="flex flex-wrap -m-4">
         <boardgame-card
