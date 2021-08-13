@@ -1,4 +1,4 @@
-FROM node:13.7-alpine as develop-stage
+FROM node:14-alpine as develop-stage
 
 # clone repo directory
 WORKDIR /usr/src/boardgames-frontend
