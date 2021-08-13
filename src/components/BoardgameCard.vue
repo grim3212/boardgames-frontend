@@ -1,7 +1,7 @@
 <template>
   <div class="xl:w-1/3 md:w-1/2 p-4">
     <div
-      class="relative flex flex-col h-64 h-full max-h-full group border border-gray-300 p-6 rounded-lg hover:bg-gray-100 cursor-pointer"
+      class="relative flex flex-col h-full max-h-full group border border-gray-300 p-6 rounded-lg hover:bg-gray-100 cursor-pointer"
       :class="{ 'bg-blue-300 hover:bg-blue-200 text-black border border-blue-600': isSelected }"
       @click="clickCard"
     >
@@ -31,11 +31,17 @@
         :src="'boardgames/' + boardgame.imageName"
       />
       <br />
-      <p class="leading-relaxed text-base group-hover:text-blue-300">
+      <p class="leading-relaxed text-base group-hover:text-blue-300 pb-1">
         {{ boardgame.description }}
       </p>
       <div
-        class="absolute size-chip m-1 font-medium py-1 px-2 bg-white rounded-full text-blue-700 bg-blue-100 border border-blue-300"
+        class="absolute left-1 bottom-1 m-1 font-medium py-1 px-2 rounded-full text-yellow-700 bg-yellow-100 border border-yellow-300"
+        v-if="boardgame.new"
+      >
+        <div class="text-xs font-normal leading-none">NEW</div>
+      </div>
+      <div
+        class="absolute right-1 bottom-1 m-1 font-medium py-1 px-2 rounded-full text-blue-700 bg-blue-100 border border-blue-300"
       >
         <div class="text-xs font-normal leading-none">{{ size }}</div>
       </div>

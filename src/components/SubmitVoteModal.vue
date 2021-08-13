@@ -11,7 +11,18 @@
         >&#8203;</span
       >
       <div
-        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        class="
+          inline-block
+          align-bottom
+          bg-white
+          rounded-lg
+          text-left
+          overflow-hidden
+          shadow-xl
+          transform
+          transition-all
+          sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
+        "
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-headline"
@@ -19,7 +30,17 @@
         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div class="sm:flex sm:items-start">
             <div
-              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+              class="
+                mx-auto
+                flex-shrink-0 flex
+                items-center
+                justify-center
+                h-12
+                w-12
+                rounded-full
+                bg-red-100
+                sm:mx-0 sm:h-10 sm:w-10
+              "
             >
               <svg
                 class="h-6 w-6 text-red-600"
@@ -54,7 +75,17 @@
                   <div class="relative">
                     <div class="absolute flex border border-transparent left-0 top-0 h-full w-10">
                       <div
-                        class="flex items-center justify-center rounded-tl rounded-bl z-10 bg-blue-100 text-blue-600 text-lg h-full w-full"
+                        class="
+                          flex
+                          items-center
+                          justify-center
+                          rounded-tl rounded-bl
+                          z-10
+                          bg-blue-100
+                          text-blue-600 text-lg
+                          h-full
+                          w-full
+                        "
                       >
                         <svg
                           viewBox="0 0 24 24"
@@ -79,7 +110,20 @@
                       type="text"
                       placeholder="Name"
                       v-model="name"
-                      class="text-sm sm:text-base relative w-full text-black border rounded placeholder-blue-400 focus:border-indigo-400 focus:outline-none py-2 pr-2 pl-12"
+                      class="
+                        text-sm
+                        sm:text-base
+                        relative
+                        w-full
+                        text-black
+                        border
+                        rounded
+                        placeholder-blue-400
+                        focus:border-indigo-400 focus:outline-none
+                        py-2
+                        pr-2
+                        pl-12
+                      "
                     />
                   </div>
                 </div>
@@ -91,14 +135,48 @@
           <button
             type="button"
             :disabled="!name"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-gray-600"
+            class="
+              w-full
+              inline-flex
+              justify-center
+              rounded-md
+              border border-transparent
+              shadow-sm
+              px-4
+              py-2
+              bg-blue-600
+              text-base
+              font-medium
+              text-white
+              hover:bg-blue-700
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+              sm:ml-3 sm:w-auto sm:text-sm
+              disabled:bg-gray-600
+            "
             @click="submitVotes"
           >
             Submit
           </button>
           <button
             type="button"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+            class="
+              mt-3
+              w-full
+              inline-flex
+              justify-center
+              rounded-md
+              border border-gray-300
+              shadow-sm
+              px-4
+              py-2
+              bg-white
+              text-base
+              font-medium
+              text-gray-700
+              hover:bg-gray-50
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+              sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm
+            "
             @click="$emit('cancel')"
           >
             Cancel
@@ -112,7 +190,7 @@
 <script lang="ts">
 import { defineComponent, toRef } from 'vue'
 import { globalState } from '../store'
-import { request } from '../util/axios'
+import { votes, now } from '../util/firebase'
 
 export default defineComponent({
   setup() {
@@ -133,16 +211,19 @@ export default defineComponent({
 
       const dataToSend = {
         name: this.name,
-        timestamp: new Date().toUTCString(),
+        timestamp: now(),
         votes: this.votes.map((bg) => ({
           _id: bg._id,
           name: bg.name,
         })),
       }
 
-      await request('/votes', 'post', dataToSend)
+      console.log(dataToSend)
+
+      await votes()
+        .collection('uservotes')
+        .add(dataToSend)
         .then(() => {
-          console.log('succesfully voted')
           this.name = ''
           this.$emit('success')
         })
